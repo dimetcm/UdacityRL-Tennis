@@ -7,7 +7,7 @@ from agent import Agent
 
 APPLY_OU_NOISE = True # apply QUNoise for action selection
 
-train_mode = True
+train_mode = False
 
 # select this option to load version 2 (with a twenty agent) of the environment
 env = UnityEnvironment(file_name='../data/Tennis_Windows_x86_64/Tennis.exe')
@@ -34,10 +34,10 @@ print('The state for the first agent looks like:', states[0])
 
 agent = Agent(state_size=state_size, action_size=action_size, random_seed=0)
 
-def ddpg(n_episodes=2000, max_t=1000, print_every=100):
+def ddpg(n_episodes=100, max_t=500, print_every=100):
     if not train_mode:
-        agent.critic_local.load_state_dict(torch.load('checkpoint_critic.pth'))
-        agent.actor_local.load_state_dict(torch.load('checkpoint_actor.pth'))
+        agent.critic_local.load_state_dict(torch.load('../checkpoint_critic.pth'))
+        agent.actor_local.load_state_dict(torch.load('../checkpoint_actor.pth'))
 
     scores_deque = deque(maxlen=print_every)
     episodeMaxMean = 0.0
@@ -48,7 +48,6 @@ def ddpg(n_episodes=2000, max_t=1000, print_every=100):
         agent.reset()
         score = np.array([0.0]*num_agents)
         for t in range(max_t):
-            #print(state)
             action = agent.act(state, add_noise = APPLY_OU_NOISE)
             env_info = env.step(action)[brain_name]
             next_state, reward, done = env_info.vector_observations, env_info.rewards, env_info.local_done
@@ -59,15 +58,16 @@ def ddpg(n_episodes=2000, max_t=1000, print_every=100):
             score += reward
             if np.any(done):
                 break
-        scores_deque.append(score)
+        scores_deque.append(np.max(score))
         scores.append(score)
         print("\repisode scores: ", score)
         print("\raverage episode score: ", np.mean(score))
+        print("\rmax agents episode score: ", np.max(score))
         print('\rEpisode {}\tLast 100 average Score: {:.2f}'.format(i_episode, np.mean(scores_deque)), end="")
         if train_mode and np.mean(score) > episodeMaxMean:
             episodeMaxMean = np.mean(score)
-            torch.save(agent.actor_local.state_dict(), 'checkpoint_actor.pth')
-            torch.save(agent.critic_local.state_dict(), 'checkpoint_critic.pth')
+            torch.save(agent.actor_local.state_dict(), '../checkpoint_actor.pth')
+            torch.save(agent.critic_local.state_dict(), '../checkpoint_critic.pth')
         if i_episode % print_every == 0:
             print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_deque)))
 
