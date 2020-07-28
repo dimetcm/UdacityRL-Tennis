@@ -6,7 +6,7 @@ import torch.optim as optim
 import numpy as np
 import copy
 from collections import namedtuple, deque
-
+import torch.nn.functional as F
 
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

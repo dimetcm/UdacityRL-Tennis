@@ -5,12 +5,12 @@ import matplotlib.pyplot as plt
 from collections import deque
 from agent import Agent
 
-APPLY_OU_NOISE = False # apply QUNoise for action selection
+APPLY_OU_NOISE = True # apply QUNoise for action selection
 
-train_mode = False
+train_mode = True
 
 # select this option to load version 2 (with a twenty agent) of the environment
-env = UnityEnvironment(file_name='../data/MA/Reacher.exe')
+env = UnityEnvironment(file_name='../data/Tennis_Windows_x86_64/Tennis.exe')
 
 brain_name = env.brain_names[0]
 brain = env.brains[brain_name]
@@ -34,10 +34,10 @@ print('The state for the first agent looks like:', states[0])
 
 agent = Agent(state_size=state_size, action_size=action_size, random_seed=0)
 
-def ddpg(n_episodes=200, max_t=1000, print_every=100):
+def ddpg(n_episodes=2000, max_t=1000, print_every=100):
     if not train_mode:
-        agent.critic_local.load_state_dict(torch.load('../checkpoint_critic.pth'))
-        agent.actor_local.load_state_dict(torch.load('../checkpoint_actor.pth'))
+        agent.critic_local.load_state_dict(torch.load('checkpoint_critic.pth'))
+        agent.actor_local.load_state_dict(torch.load('checkpoint_actor.pth'))
 
     scores_deque = deque(maxlen=print_every)
     episodeMaxMean = 0.0
