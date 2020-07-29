@@ -1,10 +1,18 @@
-# UdacityRL-ContinuousControl
+# UdacityRL-Tennis
 
 ![Reacher](/images/agents.gif)
 
 # Project Details
 
-The project shows an example of an agent controlling double-jointed arm that learns to reach target location. The observation space consists of 33 variables corresponding to position, rotation, velocity, and angular velocities of the arm. Each action is a vector with four numbers, corresponding to torque applicable to two joints. Every entry in the action vector should be a number between -1 and 1. A reward of +0.1 is provided for each step that the agent's hand is in the goal location. The goal of the  agent is to maintain its position at the target location for as many time steps as possible. Environment contains 20 identical agents, each with its own copy of the environment. The environment is considered solved when agents get an average score of +30 (over 100 consecutive episodes, and over all agents).
+In this environment, two agents control rackets to bounce a ball over a net. If an agent hits the ball over the net, it receives a reward of +0.1. If an agent lets a ball hit the ground or hits the ball out of bounds, it receives a reward of -0.01. Thus, the goal of each agent is to keep the ball in play.
+
+The observation space consists of 8 variables corresponding to the position and velocity of the ball and racket. Each agent receives its own, local observation. Two continuous actions are available, corresponding to movement toward (or away from) the net, and jumping.
+
+The task is episodic, and in order to solve the environment, agents must get an average score of +0.5 (over 100 consecutive episodes, after taking the maximum over both agents). Specifically,
+
+After each episode, we add up the rewards that each agent received (without discounting), to get a score for each agent. This yields 2 (potentially different) scores. We then take the maximum of these 2 scores.
+This yields a single score for each episode.
+The environment is considered solved, when the average (over 100 episodes) of those scores is at least +0.5.
 
 # Getting Started
 
