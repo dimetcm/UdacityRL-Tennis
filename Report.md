@@ -50,7 +50,7 @@ Ornstein–Uhlenbeck process applied to the algorithm for generating temporally 
 
 # Plot of Rewards
 Peak of the agents score is reached around the 1700th episode with the average score around 2.7 points. Maximum score is limited by the amount of timesteps in each episode (agents were trained with 1000 timesteps per episode).
-![Scores:](/images/learning.PNG)
+![Scores:](/images/training.png)
 Running the environment with an already trained network shows an average score of 1.31 points over 100 episodes. As in the case from the training plot, agents' score is limited by the amount of timesteps (100 timesteps per episode in this case). As is visible on the plont agents managed to finish only one game, since in most of the cases they cooperated for reaching maximum score instead of winning the game.
 ![Scores:](/images/performance.png)
 
