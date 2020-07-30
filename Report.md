@@ -1,5 +1,5 @@
 # Learning Algorithm
-Agent uses deep deterministic policy gradient algorithm [DDPG](https://arxiv.org/abs/1509.02971). DDPG is an actor-critic, model-free algorithm based on the deterministic policy gradient that can operate over continuous action spaces. [DDPG-pendulum project](https://github.com/udacity/deep-reinforcement-learning/tree/master/ddpg-pendulum) was used as a reference algorithm implementation adopted to the "Reacher" environment, with minor modifications.
+Agent uses deep deterministic policy gradient algorithm [DDPG](https://arxiv.org/abs/1509.02971). DDPG is an actor-critic, model-free algorithm based on the deterministic policy gradient that can operate over continuous action spaces. [DDPG-pendulum project](https://github.com/udacity/deep-reinforcement-learning/tree/master/ddpg-pendulum) was used as a reference algorithm implementation adopted to the "Tennis" environment, with minor modifications.
 
 ### Hyperparameters
 The algorithm has the following set of hyperparameters:
@@ -12,7 +12,7 @@ The algorithm has the following set of hyperparameters:
 |LR_ACTOR = 1e-4  | learning rate of the actor
 |LR_CRITIC = 1e-3  | learning rate of the critic
 |WEIGHT_DECAY = 0  | L2 weight decay
-|APPLY_OU_NOISE = False | apply QUNoise for action selection
+|APPLY_OU_NOISE = True | apply QUNoise for action selection
 
 ### Model Configuration
 #### Actor
@@ -43,16 +43,18 @@ Agents use shared experience replay buffer.
 Gradient clipping technique helps to deal with the irregular loss landscape of the model.
 
 #### Distributed distributional deterministic policy gradients
-Since the environment contains 20 simultaneos agents it was reasonable to utilize D4PG for speeding up the agents training process by sharing experience and actor/critic network weights. Probably it's the most significant addition to the algorithm since the agents showed a stable and significant improvement in the average learning score after applying D4PG. Due to the fact that every agent starts in a random environment's state, the learning process tends to generalize very well for different tasks like reaching the sphere that moves clockwise. counterclockwise or stays almost stationary. Which seems to be a problem for a single agent learning process since the environment dynamics changes only after completing the full episode.           
+Both agents store and sample experience from the same replay buffer, share actor and critic networks.
+
 #### Ornstein–Uhlenbeck noise
-Ornstein–Uhlenbeck process can be easily applied to the algorithm for generating temporally correlated exploration, but it's disabled by default since it doesn't add much to the agent's learning process.
+Ornstein–Uhlenbeck process applied to the algorithm for generating temporally correlated exploration.
 
 # Plot of Rewards
-Average agents score stabilizes after the 80th episode reaching the average reward around 36 points. 
+Peak of the agents score is reached around the 1700th episode with the average score around 2.7 points. Maximum score is limited by the amount of timesteps in each episode (agents were trained with 1000 timesteps per episode).
 ![Scores:](/images/learning.PNG)
-Running the environment with an already trained network shows an average score around 38.5 points over 200 episodes.
-![Scores:](/images/agents_performance.png)
+Running the environment with an already trained network shows an average score of 1.31 points over 100 episodes. As in the case from the training plot, agents' score is limited by the amount of timesteps (100 timesteps per episode in this case). As is visible on the plont agents managed to finish only one game, since in most of the cases they cooperated for reaching maximum score instead of winning the game.
+![Scores:](/images/performance.png)
+
 # Ideas for Future Work
 
-### Comparing performance to other algorithms, like PPO. Adding prioritized experience replay.
-### Testing the performance of the algorithm in a "reacher" Reacher environment, for example with an arm containing four joints 
+### Make training faster by tuning hyperparameters. Comparing performance to other algorithms, like PPO. Adding prioritized experience replay.
+### Training competitive agents instead of cooperative, so agents are getting score for winning a game instead of passing the ball on the other side.
