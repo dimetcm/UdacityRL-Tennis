@@ -9,7 +9,6 @@ APPLY_OU_NOISE = True # apply QUNoise for action selection
 
 train_mode = False
 
-# select this option to load version 2 (with a twenty agent) of the environment
 env = UnityEnvironment(file_name='../data/Tennis_Windows_x86_64/Tennis.exe')
 
 brain_name = env.brain_names[0]
@@ -44,7 +43,7 @@ def ddpg(n_episodes=100, max_t=500, print_every=100):
     scores = []
     for i_episode in range(1, n_episodes + 1):
         env_info = env.reset(train_mode=train_mode)[brain_name]
-        state = env_info.vector_observations#[0]
+        state = env_info.vector_observations
         agent.reset()
         score = np.array([0.0]*num_agents)
         for t in range(max_t):
